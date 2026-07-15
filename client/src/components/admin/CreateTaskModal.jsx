@@ -1,5 +1,6 @@
 ﻿import { useState } from 'react';
 import { createTask, fetchTalents } from '../../api/tasks';
+import { useEffect } from 'react';
 
 const STATUS_OPTIONS = ['Open', 'Claimed', 'Submitted', 'Approved', 'Rejected'];
 
@@ -10,13 +11,27 @@ const CreateTaskModal = ({ onClose, onCreated }) => {
   const [form, setForm] = useState({ title: '', description: '', status: 'Open', assignedTo: '', dueDate: '' });
   const [talents, setTalents] = useState([]);
   const [loadingTalents, setLoadingTalents] = useState(false);
-  useState(() => {
+
+  // calculate today's date in YYYY-MM-DD format
+  const todayString = new Date().toISOString().split('T')[0];
+
+  // use useEffect insted of useState for fetching data on mount
+  useEffect(() => {
+    setLoadingTalents(true);
+
+    fetchTalents()
+    .then(({ data }) => setTalents(data))
+    .catch(() => alert("Failed to load talents"))
+    .finally(() => setLoadingTalents(false));
+  }, []);
+
+  /* useState(() => {
     setLoadingTalents(true);
     fetchTalents()
       .then(({ data }) => setTalents(data))
       .catch(() => alert('Failed to load talents'))
       .finally(() => setLoadingTalents(false));
-  }, []);
+  }, []); */
 
   const handleChange = (e) => setForm((p) => ({ ...p, [e.target.name]: e.target.value }));
 
@@ -70,7 +85,7 @@ const CreateTaskModal = ({ onClose, onCreated }) => {
             <div className="flex flex-col gap-1.5">
               <label className={labelCls}>Due Date</label>
               
-              <input type="date" name="dueDate" value={form.dueDate} onChange={handleChange} className={inputCls} />
+              <input type="date" name="dueDate" min={todayString} value={form.dueDate} onChange={handleChange} className={inputCls} />
             </div>
           </div>
 

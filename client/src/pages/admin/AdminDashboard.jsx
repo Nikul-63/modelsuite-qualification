@@ -27,24 +27,67 @@ const AdminDashboard = () => {
   const [search, setSearch]         = useState('');
   const [statusFilter, setStatusFilter] = useState('All');
 
-  const loadTasks = async () => {
+  /* -------------- Pagination State ------------------ */
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalTasks, setTotalTasks] = useState(0);
+
+  /* -------------- State States ------------------- */
+  const [stats , setStats] = useState({ total : 0, open : 0, submitted : 0, approved : 0});
+
+  const loadTasks = async (currentPage = page) => {
     try {
-      const { data } = await fetchAllTasks();
-      setTasks(data);
-    } catch {
+      const { data } = await fetchAllTasks(currentPage, 5);
+
+      if(data && data.tasks)
+      {
+        setTasks(data.tasks);
+        setTotalPages(data.pagination?.totalPages || 1);
+        setTotalTasks(data.pagination?.totalTasks || data.tasks.length);
+
+        // update state from backend response
+        if(data.stats)
+        {
+          setStats(data.stats);
+        }
+      }
+      else if(Array.isArray(data))
+      {
+        setTasks(data);
+        setTotalTasks(data.length);
+        setTotalPages(Math.ceil(data.length / 5) || 1);
+      }
+      
+    } catch(err){
+      console.error("Load tasks error: ", err);
       alert('Failed to load tasks');
     }
   };
 
   // eslint-disable-next-line
-  useEffect(() => { loadTasks(); }, []);
+  useEffect(() => { 
+    loadTasks(page); 
 
-  const stats = {
+    // smoothly scroll to the top of the viewport
+    window.scrollTo({ top : 0, behaviour : 'smooth'});
+  }, [page]);
+
+  // handling task ceration
+  const handleTaskCreated = () => {
+    if(page === 1)
+    {
+      loadTasks(1);
+    }else {
+      setPage(1);
+    }
+  };
+
+  /* const stats = {
     total:     tasks.length,
     open:      tasks.filter((t) => t.status === 'Open').length,
     submitted: tasks.filter((t) => t.status === 'Submitted').length,
     approved:  tasks.filter((t) => t.status === 'Approved').length,
-  };
+  }; */
 
   const statCards = [
     { label: 'Total Tasks', value: stats.total,     colorClass: 'stat-card-default', valueColor: '#E5E2E1' },
@@ -157,6 +200,30 @@ const AdminDashboard = () => {
           </div>
 
           <TasksTable tasks={filteredTasks} onEdit={setEditTask} onRefresh={loadTasks} />
+
+          {/* ------------ Pagination Bar ------------------ */}
+          <div className="flex items-center justify-between px-6 py-4 border-t border-border mt-2">
+            <span className="text-xs text-text-muted">
+              Page <strong className="text-text-primary">{page}</strong> of{' '}
+              <strong className="text-text-primary">{totalPages || 1}</strong>
+            </span>
+
+            <div className="flex items-center gap-2">
+              <button 
+              onClick={() => setPage((n) => Math.max(n - 1, 1))}
+              disabled={page === 1}
+              className="px-3 py-1.5 text-xs font-medium rounded-lg border border-border bg-bg-input disabled:opacity-40 disabled:cursor-not-allowed hover:bg-bg-hover transition-all text-text-primary cursor-pointer">
+                Previous
+              </button>
+
+              <button 
+              onClick={() => setPage((n) => Math.min(n + 1, totalPages))}
+              disabled={page >= totalPages}
+              className="px-3 py-1.5 text-xs font-medium rounded-lg border border-border bg-bg-input disabled:opacity-40 disabled:cursor-not-allowed hover:bg-bg-hover transition-all text-text-primary cursor-pointer">
+                Next
+              </button>
+            </div>
+          </div>
         </div>
       </main>
 

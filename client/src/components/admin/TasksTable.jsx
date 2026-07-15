@@ -44,6 +44,12 @@ const STATUS_CLASS = {
 const TasksTable = ({ tasks, onEdit, onRefresh }) => {
 
   const handleDelete = async (id) => {
+
+    // add confirmation dialogue box
+    const isConfirmed = window.confirm("Are you sure you want to delete this task? This action can't be undone..!");
+
+    // If user click cancle stop the execution
+    if(!isConfirmed) return;
     try {
       await deleteTask(id);
       onRefresh();
