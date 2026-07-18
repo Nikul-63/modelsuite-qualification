@@ -17,12 +17,15 @@ const CreateTaskModal = ({ onClose, onCreated }) => {
 
   // use useEffect insted of useState for fetching data on mount
   useEffect(() => {
-    setLoadingTalents(true);
+    const timer = setTimeout(() => {
+      setLoadingTalents(true);
+      fetchTalents()
+        .then(({ data }) => setTalents(data))
+        .catch(() => alert("Failed to load talents"))
+        .finally(() => setLoadingTalents(false));
+    }, 0);
 
-    fetchTalents()
-    .then(({ data }) => setTalents(data))
-    .catch(() => alert("Failed to load talents"))
-    .finally(() => setLoadingTalents(false));
+    return () => clearTimeout(timer);
   }, []);
 
   /* useState(() => {

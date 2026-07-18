@@ -51,6 +51,8 @@ const Sidebar = () => {
   const navigate  = useNavigate();
   const location  = useLocation();
 
+  console.log(IconLogout);
+
   return (
     <aside className="fixed inset-y-0 left-0 w-[240px] flex flex-col z-50"
       style={{ background: '#0D0D0D' }}>
@@ -71,6 +73,7 @@ const Sidebar = () => {
 
         {navItems.map(({ label, path, Icon }) => {
           const isActive = location.pathname === path;
+          console.log(Icon);
           return (
             <button key={path}
               onClick={() => navigate(path)}

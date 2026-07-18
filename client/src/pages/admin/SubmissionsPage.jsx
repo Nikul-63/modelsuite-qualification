@@ -3,11 +3,11 @@ import Sidebar from '../../components/admin/Sidebar';
 import SubmissionReviewModal from '../../components/admin/SubmissionReviewModal';
 import { fetchAllSubmissions, reviewSubmission } from '../../api/submissions';
 
-const REVIEW_STATUS_CLASS = {
+/* const REVIEW_STATUS_CLASS = {
   Pending:  'status-badge-Submitted',
   Approved: 'status-badge-Approved',
   Rejected: 'status-badge-Rejected',
-}; // comment this later
+};  */// comment this later
 
 const STATUS_BADGE = {
   Pending: 'bg-yellow-500/10 text-yellow-500 border-yellow-500/30',
@@ -58,8 +58,10 @@ const SubmissionsPage = () => {
   const currentTask = selectedSubmission?.taskId || {};
   const currentTalent = selectedSubmission?.talentId || {};
 
-  const thCls = 'text-left px-5 py-3 text-[11px] font-semibold uppercase tracking-[0.7px] text-text-faint border-b border-border whitespace-nowrap';
-  const tdCls = 'px-5 py-4 border-b border-border align-middle';
+  /* const thCls = 'text-left px-5 py-3 text-[11px] font-semibold uppercase tracking-[0.7px] text-text-faint border-b border-border whitespace-nowrap';
+  const tdCls = 'px-5 py-4 border-b border-border align-middle'; */
+
+  console.log(Sidebar, SubmissionReviewModal);
 
   return (
     <div className="flex min-h-screen bg-bg-dark font-sans text-text-primary">

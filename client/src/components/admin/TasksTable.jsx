@@ -71,6 +71,8 @@ const TasksTable = ({ tasks, onEdit, onRefresh }) => {
     );
   }
 
+  console.log(IconEdit, IconDelete);
+
   return (
     <div className="overflow-x-auto">
       <table className="w-full border-collapse" style={{ fontSize: '13.5px' }}>

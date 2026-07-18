@@ -23,9 +23,17 @@ const TalentDashboard = () => {
     catch { setError('Failed to load your tasks'); }
   };
 
-  // eslint-disable-next-line
-  useEffect(() => { loadAvailable(); loadMyTasks(); }, []);
+   
+  useEffect(() => { 
+    const timer = setTimeout(() => {
+      loadAvailable(); 
+      loadMyTasks();
+    }, 0);
+    return () => clearTimeout(timer);
+   }, []);
   const handleRefresh = () => { loadAvailable(); loadMyTasks(); };
+
+  console.log(TalentSidebar, AvailableTasksList, MyTasksList);
 
   return (
     <div className="flex min-h-screen" style={{ background: '#050505' }}>

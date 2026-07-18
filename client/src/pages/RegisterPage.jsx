@@ -29,6 +29,8 @@ const RegisterPage = () => {
     }
   };
 
+  console.log(Link, Logo);
+
   return (
     <div className="grid min-h-screen grid-cols-1 lg:grid-cols-[480px_1fr]">
       {/* ── Left: Form panel ── */}

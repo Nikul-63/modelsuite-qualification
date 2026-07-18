@@ -64,30 +64,17 @@ const AdminDashboard = () => {
     }
   };
 
-  // eslint-disable-next-line
+   
   useEffect(() => { 
-    loadTasks(page); 
+    const timer = setTimeout(() => {
+      loadTasks(page);
+    }, 0);
 
     // smoothly scroll to the top of the viewport
     window.scrollTo({ top : 0, behaviour : 'smooth'});
+
+    return () => clearTimeout(timer);
   }, [page]);
-
-  // handling task ceration
-  const handleTaskCreated = () => {
-    if(page === 1)
-    {
-      loadTasks(1);
-    }else {
-      setPage(1);
-    }
-  };
-
-  /* const stats = {
-    total:     tasks.length,
-    open:      tasks.filter((t) => t.status === 'Open').length,
-    submitted: tasks.filter((t) => t.status === 'Submitted').length,
-    approved:  tasks.filter((t) => t.status === 'Approved').length,
-  }; */
 
   const statCards = [
     { label: 'Total Tasks', value: stats.total,     colorClass: 'stat-card-default', valueColor: '#E5E2E1' },
@@ -104,6 +91,8 @@ const AdminDashboard = () => {
     const matchStatus = statusFilter === 'All' || t.status === statusFilter;
     return matchSearch && matchStatus;
   });
+
+  console.log(Sidebar, TasksTable, totalTasks, CreateTaskModal, EditTaskModal, IconSearch, IconPlus);
 
   return (
     <div className="flex min-h-screen" style={{ background: '#050505' }}>

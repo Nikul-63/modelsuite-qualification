@@ -15,6 +15,7 @@ const PrivateRoute = ({ children, role }) => {
 };
 
 function App() {
+  console.log(BrowserRouter, Routes, Route, Navigate, AuthProvider, LoginPage, RegisterPage, AdminDashboard, SubmissionsPage, TalentDashboard, NotFoundPage, PrivateRoute);
   return (
     <AuthProvider>
       <BrowserRouter>
